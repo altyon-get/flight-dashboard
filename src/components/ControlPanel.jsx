@@ -46,15 +46,21 @@ const ControlPanel = () => {
 
   const stopFlightUpdates = (flightName) => {
     const status1 = `Closing Engine...🫡!`;
-    setFlightLogs((prevLogs) => [...prevLogs, status1]);
+    setTimeout(() => {
+      setFlightLogs((prevLogs) => [...prevLogs, status1]);
+    }, 2000);
 
     setIsFlightRunning(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+
     const status2 = `Flight${flightName} stopped!`;
-    setFlightLogs((prevLogs) => [...prevLogs, status2]);
+    
+    setTimeout(() => {
+      setFlightLogs((prevLogs) => [...prevLogs, status2]);
+    }, 2000);
 
     if (isFlightLanded) {
       setSelectedFlight(null);
@@ -86,7 +92,7 @@ const ControlPanel = () => {
         setArrTime(arrivalTime.toISOString().slice(11, 19));
       }
     }
-
+    setIsFlightLanded(false);
     setFlightLogs([]);
 
     return () => {

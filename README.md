@@ -60,6 +60,28 @@ To get started with the project, follow these steps:
 - Zoom in and out to get a detailed or broad view of the grid.
 - Track flights in real-time by their IDs.
 
+## Screenshots
+
+### All Flights
+![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/cfc02487-a889-42e7-a905-f0a8f12da232)
+
+
+### Control Panel
+![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/067d352a-924a-489c-9383-afcc5ad49dd7)
+
+
+### Flight Schedule
+![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/938457c3-fdc8-4a24-a2c1-b9a64261678f)
+
+
+### Adjust Weather
+![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/6e779ff7-acf1-4b96-8fd6-fe4fb2151ee1)
+
+
+### Interactive Map
+![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/dfbf9229-4a32-4bd5-86a0-f6b7df43bdf1)
+
+
 ## Notes
 - Ensure your development environment meets the required dependencies listed in `package.json`.
 - For any issues or contributions, please refer to the project's repository.

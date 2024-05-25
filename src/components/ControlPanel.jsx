@@ -17,6 +17,7 @@ const ControlPanel = () => {
   const [flightName, setFlightName] = useState(selectedFlight?.flightId || "");
   const [isFlightRunning, setIsFlightRunning] = useState(false);
   const [isFlightLanded, setIsFlightLanded] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const logsEndRef = useRef(null);
   const intervalRef = useRef(null);
   const [arrTime, setArrTime] = useState("");
@@ -26,12 +27,10 @@ const ControlPanel = () => {
     setFlightName(flightId);
     const flight = flights.find((flight) => flight.flightId === flightId);
     setSelectedFlight(flight);
-    // if (flight?.departureTime) {
     const departureTime = new Date(`1970-01-01T${flight.departureTime}Z`);
     const arrivalTime = new Date(
       departureTime.getTime() + flight.reserveCord.length * 4000
     );
-    // }
     setArrTime(arrivalTime.toISOString().slice(11, 19));
   };
 
@@ -46,7 +45,6 @@ const ControlPanel = () => {
   };
 
   const stopFlightUpdates = (flightName) => {
-    // handleStopFlight(flightName);
     const status1 = `Closing Engine...🫡!`;
     setFlightLogs((prevLogs) => [...prevLogs, status1]);
 
@@ -56,19 +54,26 @@ const ControlPanel = () => {
       intervalRef.current = null;
     }
     const status2 = `Flight${flightName} stopped!`;
-
     setFlightLogs((prevLogs) => [...prevLogs, status2]);
-    setIsFlightLanded(true);
-    // setSelectedFlight(null);
+
+    if (isFlightLanded) {
+      setSelectedFlight(null);
+      setShowSuccess(true);
+    }
   };
 
   useEffect(() => {
+    if (flightLogs[flightLogs.length - 1] === "Flight reaching destination") {
+      setIsFlightLanded(true);
+    }
+
     if (logsEndRef.current) {
       logsEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [flightLogs]);
 
   useEffect(() => {
+    // console.log(selectedFlight, "selectedFlight");
     if (selectedFlight) {
       const flight = flights.find(
         (flight) => flight.flightId === selectedFlight.flightId
@@ -81,7 +86,9 @@ const ControlPanel = () => {
         setArrTime(arrivalTime.toISOString().slice(11, 19));
       }
     }
+
     setFlightLogs([]);
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -114,7 +121,7 @@ const ControlPanel = () => {
       <div className="details-and-actions">
         <div className="flight-details">
           <h2>Flight Details</h2>
-          {selectedFlight ? (
+          {selectedFlight && flights.length ? (
             <>
               <div>
                 <p>
@@ -133,32 +140,30 @@ const ControlPanel = () => {
                   {selectedFlight.departureTime}
                 </p>
                 <p>
-                  <strong>Destination Time:</strong> {arrTime}
+                  <strong>Arrival Time:</strong> {arrTime}
                 </p>
               </div>
-              {!isFlightLanded && (
-                <div className="button-group">
+
+              <div className="button-group">
+                <button
+                  onClick={() => startFlightUpdates(flightName)}
+                  className="start-button"
+                  disabled={isFlightRunning || !flightName}
+                >
+                  {isFlightRunning ? "Running" : "Run"}
+                </button>
+                {isFlightRunning && (
                   <button
-                    onClick={() => startFlightUpdates(flightName)}
-                    className="start-button"
-                    disabled={isFlightRunning || !flightName}
+                    onClick={() => stopFlightUpdates(flightName)}
+                    className="stop-button"
                   >
-                    {isFlightRunning ? "Running" : "Run"}
+                    Stop
                   </button>
-                  {isFlightRunning && (
-                    <button
-                      onClick={() => stopFlightUpdates(flightName)}
-                      className="stop-button"
-                    >
-                      Stop
-                    </button>
-                  )}
-                </div>
-              )}
-              {isFlightLanded && (
-                <p className="success-message">Flight Landed Successfully</p>
-              )}
+                )}
+              </div>
             </>
+          ) : showSuccess ? (
+            <p className="success-message">Flight Landed Successfully!</p>
           ) : (
             <p>No flight selected</p>
           )}

@@ -1,7 +1,10 @@
 # AeroNavigator
 
 Deployed URL: [https://aeronavigator.vercel.app/](https://aeronavigator.vercel.app/)
-[Backend URL](https://github.com/anuragdw710/AIRBUSAerothonBackend)
+
+Backend URL: [https://github.com/anuragdw710/AIRBUSAerothonBackend](https://github.com/anuragdw710/AIRBUSAerothonBackend)
+
+Demo: [Google Drive Folder](https://drive.google.com/drive/folders/1br_PotmnpvmjXB-ZQgdEObXPrJHmRIoU?usp=sharing)
 
 ## Setup
 
@@ -64,24 +67,19 @@ To get started with the project, follow these steps:
 ## Screenshots
 
 ### All Flights
-![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/cfc02487-a889-42e7-a905-f0a8f12da232)
-
+![All Flights](screenshots/all_flights.png)
 
 ### Control Panel
-![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/067d352a-924a-489c-9383-afcc5ad49dd7)
-
+![Control Panel](screenshots/control_panel.png)
 
 ### Flight Schedule
-![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/938457c3-fdc8-4a24-a2c1-b9a64261678f)
-
+![Flight Schedule](screenshots/flight_schedule.png)
 
 ### Adjust Weather
-![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/6e779ff7-acf1-4b96-8fd6-fe4fb2151ee1)
-
+![Adjust Weather](screenshots/adjust_weather.png)
 
 ### Interactive Map
-![image](https://github.com/altyon-get/flight-dashboard/assets/73048959/dfbf9229-4a32-4bd5-86a0-f6b7df43bdf1)
-
+![Interactive Map](screenshots/interactive_map.png)
 
 ## Notes
 - Ensure your development environment meets the required dependencies listed in `package.json`.

@@ -5,30 +5,40 @@ import handleStopFlight from "../services/handleStopFlight";
 import "../assets/styles/ControlPanel.css";
 
 const ControlPanel = () => {
-  const { response, planeIds, flights, flightLogs, setSelectedFlight, selectedFlight,setFlightLogs } = useSocket();
-  const [flightName, setFlightName] = useState("");
+  const {
+    response,
+    planeIds,
+    flights,
+    flightLogs,
+    setSelectedFlight,
+    selectedFlight,
+    setFlightLogs,
+  } = useSocket();
+  const [flightName, setFlightName] = useState(selectedFlight?.flightId || "");
   const [isFlightRunning, setIsFlightRunning] = useState(false);
+  const [isFlightLanded, setIsFlightLanded] = useState(false);
   const logsEndRef = useRef(null);
   const intervalRef = useRef(null);
   const [arrTime, setArrTime] = useState("");
-
 
   const handleInputChange = (e) => {
     const flightId = Number(e.target.value);
     setFlightName(flightId);
     const flight = flights.find((flight) => flight.flightId === flightId);
     setSelectedFlight(flight);
+    // if (flight?.departureTime) {
     const departureTime = new Date(`1970-01-01T${flight.departureTime}Z`);
     const arrivalTime = new Date(
       departureTime.getTime() + flight.reserveCord.length * 4000
     );
+    // }
     setArrTime(arrivalTime.toISOString().slice(11, 19));
   };
 
   const startFlightUpdates = (flightName) => {
     handleStartFlight(flightName);
     setIsFlightRunning(true);
-    const status =`Flight${flightName} taking off!`;
+    const status = `Flight${flightName} taking off! 🚀🚀🚀`;
     setFlightLogs((prevLogs) => [...prevLogs, status]);
     intervalRef.current = setInterval(() => {
       handleStartFlight(flightName);
@@ -37,7 +47,7 @@ const ControlPanel = () => {
 
   const stopFlightUpdates = (flightName) => {
     // handleStopFlight(flightName);
-    const status1 =`Flight${flightName} stopping...!`
+    const status1 = `Closing Engine...🫡!`;
     setFlightLogs((prevLogs) => [...prevLogs, status1]);
 
     setIsFlightRunning(false);
@@ -45,9 +55,11 @@ const ControlPanel = () => {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    const status2 =`Flight${flightName} stopped!`
+    const status2 = `Flight${flightName} stopped!`;
 
     setFlightLogs((prevLogs) => [...prevLogs, status2]);
+    setIsFlightLanded(true);
+    // setSelectedFlight(null);
   };
 
   useEffect(() => {
@@ -57,6 +69,18 @@ const ControlPanel = () => {
   }, [flightLogs]);
 
   useEffect(() => {
+    if (selectedFlight) {
+      const flight = flights.find(
+        (flight) => flight.flightId === selectedFlight.flightId
+      );
+      if (flight?.departureTime) {
+        const departureTime = new Date(`1970-01-01T${flight.departureTime}Z`);
+        const arrivalTime = new Date(
+          departureTime.getTime() + flight.reserveCord.length * 3000
+        );
+        setArrTime(arrivalTime.toISOString().slice(11, 19));
+      }
+    }
     setFlightLogs([]);
     return () => {
       if (intervalRef.current) {
@@ -97,35 +121,43 @@ const ControlPanel = () => {
                   <strong>Flight Name:</strong> {selectedFlight.airPlaneName}
                 </p>
                 <p>
-                  <strong>Departure Airport:</strong> {selectedFlight.departureAirport}
+                  <strong>Departure Airport:</strong>{" "}
+                  {selectedFlight.departureAirport}
                 </p>
                 <p>
-                  <strong>Destination Airport:</strong> {selectedFlight.destinationAirport}
+                  <strong>Destination Airport:</strong>{" "}
+                  {selectedFlight.destinationAirport}
                 </p>
                 <p>
-                  <strong>Departure Time:</strong> {(selectedFlight.departureTime)}
+                  <strong>Departure Time:</strong>{" "}
+                  {selectedFlight.departureTime}
                 </p>
                 <p>
                   <strong>Destination Time:</strong> {arrTime}
                 </p>
               </div>
-              <div className="button-group">
-                <button
-                  onClick={() => startFlightUpdates(flightName)}
-                  className="start-button"
-                  disabled={isFlightRunning || !flightName}
-                >
-                  {isFlightRunning ? "Running" : "Run"}
-                </button>
-                {isFlightRunning && (
+              {!isFlightLanded && (
+                <div className="button-group">
                   <button
-                    onClick={() => stopFlightUpdates(flightName)}
-                    className="stop-button"
+                    onClick={() => startFlightUpdates(flightName)}
+                    className="start-button"
+                    disabled={isFlightRunning || !flightName}
                   >
-                    Stop
+                    {isFlightRunning ? "Running" : "Run"}
                   </button>
-                )}
-              </div>
+                  {isFlightRunning && (
+                    <button
+                      onClick={() => stopFlightUpdates(flightName)}
+                      className="stop-button"
+                    >
+                      Stop
+                    </button>
+                  )}
+                </div>
+              )}
+              {isFlightLanded && (
+                <p className="success-message">Flight Landed Successfully</p>
+              )}
             </>
           ) : (
             <p>No flight selected</p>
@@ -135,11 +167,12 @@ const ControlPanel = () => {
         <div className="flight-logs">
           <h2>Flight Logs</h2>
           <ul>
-            {flightLogs && flightLogs.map((log, index) => (
-              <li key={index} className="log-item">
-                {log}
-              </li>
-            ))}
+            {flightLogs &&
+              flightLogs.map((log, index) => (
+                <li key={index} className="log-item">
+                  {log}
+                </li>
+              ))}
             <div ref={logsEndRef} />
           </ul>
         </div>

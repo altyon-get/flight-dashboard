@@ -94,7 +94,7 @@ const AllFlights = () => {
                 onClick={() => handleRowClick(flight)}
                 className={selectedFlight?._id === flight._id ? 'selectedRow' : ''}
               >
-                <td>{index + 1}</td>
+                <td>{10-index}</td>
                 <td>{flight.airPlaneName}</td>
                 <td>{flight.departureAirport}</td>
                 <td>{flight.destinationAirport}</td>

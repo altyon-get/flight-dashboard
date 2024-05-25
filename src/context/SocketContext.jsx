@@ -30,10 +30,10 @@ export const SocketProvider = ({ children }) => {
       setFlightLogs((prevLogs) => [...prevLogs, data]);
     });
 
-    socket.on("stopFlight", (data) => {
+    // socket.on("stopFlight", (data) => {
       // console.log(data, "flight log");
-      setFlightLogs((prevLogs) => [...prevLogs, data]);
-    });
+      // setFlightLogs((prevLogs) => [...prevLogs, data]);
+    // });
 
     socket.on("initData", ({ cords, flights, airport, airplane }) => {
       // console.log("cord data", cords);
@@ -60,13 +60,12 @@ export const SocketProvider = ({ children }) => {
     });
 
     socket.on("weatherUpdate", (updatedCords) => {
+      console.log("second socket data succesful");
       setCords((prevCords) => {
         const cordsMap = new Map(prevCords.map((c) => [`${c.x},${c.y}`, c]));
         updatedCords.forEach((c) => cordsMap.set(`${c.x},${c.y}`, c));
         return Array.from(cordsMap.values());
       });
-
-      console.log("second socket data succesful");
     });
 
     // socket.on("getFlight", (data) => {

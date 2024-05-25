@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSocket } from "../context/SocketContext";
 import "../assets/styles/FlightSchedule.css";
 import socket from "../services/socket"; // Adjust the path if necessary
@@ -47,12 +47,13 @@ const FlightSchedule = () => {
       setLoading(false);
       const departureTime = new Date(`1970-01-01T${depTime}Z`);
       const arrivalTime = new Date(
-        departureTime.getTime() + data.reserveCord.length * 4000
+        departureTime.getTime() + data.reserveCord.length * 3000
       );
-      console.log('gap:', data.reserveCord.length * 4000);
-      console.log("Expected arrival time:", arrivalTime.toISOString().slice(11, 19));
+      // console.log('gap:', data.reserveCord.length * 4000);
+      // console.log("Expected arrival time:", arrivalTime.toISOString().slice(11, 19));
 
       setArrTime(arrivalTime.toISOString().slice(11, 19));
+      setSelectedAirports([]);
     });
   };
 
@@ -72,7 +73,7 @@ const FlightSchedule = () => {
       <h2>Schedule Flight</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Plane ID:</label>
+          <label>Plane:</label>
           <select
             value={planeName}
             onChange={(e) => setPlaneName(e.target.value)}
@@ -87,33 +88,37 @@ const FlightSchedule = () => {
           </select>
         </div>
         <div className="form-group">
-          <label>Source ID:</label>
+          <label>Source:</label>
           <select
             value={startId}
             onChange={(e) => handleAirportChange(e, 'start')}
             required
           >
             <option value="">Select Source</option>
-            {airports.map(({ airPortName }) => (
-              <option key={airPortName} value={airPortName}>
-                {airPortName}
-              </option>
-            ))}
+            {airports
+              .filter(({ airPortName }) => airPortName !== goalId)
+              .map(({ airPortName }) => (
+                <option key={airPortName} value={airPortName}>
+                  {airPortName}
+                </option>
+              ))}
           </select>
         </div>
         <div className="form-group">
-          <label>Destination ID:</label>
+          <label>Destination:</label>
           <select
             value={goalId}
             onChange={(e) => handleAirportChange(e, 'goal')}
             required
           >
             <option value="">Select Destination</option>
-            {airports.map(({ airPortName }) => (
-              <option key={airPortName} value={airPortName}>
-                {airPortName}
-              </option>
-            ))}
+            {airports
+              .filter(({ airPortName }) => airPortName !== startId)
+              .map(({ airPortName }) => (
+                <option key={airPortName} value={airPortName}>
+                  {airPortName}
+                </option>
+              ))}
           </select>
         </div>
         <div className="form-group">

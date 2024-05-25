@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 import io from "socket.io-client";
 
-const Plane = ({ plane, index, isSelected , spacing}) => {
+const Plane = ({ plane, index, isSelected , spacing, flightId}) => {
   // const spacing = 40; 
   // Adjust as needed for spacing
   const { reserveCord } = plane;
@@ -51,6 +51,7 @@ const Plane = ({ plane, index, isSelected , spacing}) => {
         ✈️
         {10-index}
       </text>
+        {/* {flightId} */}
     </g>
   );
 };

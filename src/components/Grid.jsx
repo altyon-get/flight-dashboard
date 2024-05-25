@@ -89,6 +89,7 @@ const Grid = () => {
               return (
                 <Plane
                   key={plane._id}
+                  flightId={plane.flightId}
                   plane={plane}
                   index={index}
                   isSelected={isSelected}

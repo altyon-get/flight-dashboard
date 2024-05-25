@@ -182,3 +182,16 @@ button:active {
     transform: translateX(0);
   }
 }
+
+
+.success-message {
+  color: green;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px solid green;
+  border-radius: 5px;
+  background-color: #eaffea;
+}
